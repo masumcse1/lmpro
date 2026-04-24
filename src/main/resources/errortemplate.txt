@@ -3,7 +3,7 @@
 =====================Errror Response Template======================================
 {
   "timestamp": "ISO-8601 datetime",
-  "status": 400,
+  "status": 400,  // No need
   "code": 6001,
   "error_type": "SHORT_ERROR_CODE",
   "message": "Detailed human-readable error message",
@@ -19,7 +19,7 @@
 
 {
   "timestamp": "2026-04-24T15:50:22Z",
-  "status": 402,
+  "status": 402, // No need 
   "code": 6001,
   "error": "INSUFFICIENT_FUNDS",
   "message": "Transaction declined: Account balance is below the required amount.",
