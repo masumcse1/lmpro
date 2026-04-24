@@ -1,13 +1,13 @@
 package com.opt.lmpro.exception.global;
 
 import com.opt.lmpro.exception.error.UserNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -24,14 +24,19 @@ public class GlobalExceptionHandler {
      * @return Structured error response with NOT_FOUND status
      */
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
-        // Log business errors at WARN level - expected failures
-       // log.warn("User not found: {}", ex.getUserId());
+    public ResponseEntity<ErrorResponse> handleUserNotFound(
+            UserNotFoundException ex,
+            HttpServletRequest request) {
+
+        String traceId = UUID.randomUUID().toString();
 
         ErrorResponse error = ErrorResponse.builder()
-                .code("USER_NOT_FOUND")           // Machine-readable code
-                .message(ex.getMessage())         // Human-readable message
-                .timestamp(LocalDateTime.now())  // When error occurred
+                .error_type("USER_NOT_FOUND")
+                .message(ex.getMessage())
+                .timestamp(Instant.now())
+                .method(request.getMethod())
+                .path(request.getRequestURI())
+                .traceId(traceId)
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
@@ -44,45 +49,48 @@ public class GlobalExceptionHandler {
      * @return Generic error response with tracking reference
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
-        // Generate unique ID for error tracking and correlation
-        String errorId = UUID.randomUUID().toString();
+    public ResponseEntity<ErrorResponse> handleGeneral(
+            Exception ex,
+            HttpServletRequest request) {
 
-        // Log unexpected errors at ERROR level with full context
-        log.error("Unexpected error [{}]", errorId, ex);
+        String traceId = UUID.randomUUID().toString();
+
+        log.error("Unexpected error [{}]", traceId, ex);
 
         ErrorResponse error = ErrorResponse.builder()
-                .code("INTERNAL_ERROR")
-                .message("An unexpected error occurred. Error ID: " + errorId)
-                .timestamp(LocalDateTime.now())
+                .error_type("INTERNAL_ERROR")
+                .message("An unexpected error occurred")
+                .timestamp(Instant.now())
+                .method(request.getMethod())
+                .path(request.getRequestURI())
+                .traceId(traceId)
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
-    /**
-     * Handler for all business exceptions
-     * Processes exceptions uniformly while preserving individual characteristics
-     */
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex, HttpServletRequest request) {
 
-        // Create response with exception's own error code and message
+        String traceId = UUID.randomUUID().toString();
+
         ErrorResponse response = ErrorResponse.builder()
-                .code(ex.getErrorCode())              // Use exception's error code
-                .message(ex.getMessage())             // Use exception's message
-                .timestamp(LocalDateTime.now())
-                .details(ex.getContext())             // Include rich context
+                .code(Error_Type.valueOf(ex.getErrorCode()).getCode())
+                .error_type(ex.getErrorCode())
+                .message(ex.getMessage())
+                .timestamp(Instant.now())
+                .method(request.getMethod())
+                .path(request.getRequestURI())
+                .traceId(traceId)
+                .details(ex.getContext())
                 .build();
 
-        // Log with appropriate level based on HTTP status
         if (ex.getHttpStatus().is5xxServerError()) {
-            log.error("Business exception: {}", ex.getMessage(), ex);
+            log.error("Business exception [{}]: {}", traceId, ex.getMessage(), ex);
         } else {
-            log.warn("Business exception: {} - {}", ex.getErrorCode(), ex.getMessage());
+            log.warn("Business exception [{}]: {} - {}", traceId, ex.getErrorCode(), ex.getMessage());
         }
 
-        // Return response with exception's designated HTTP status
         return ResponseEntity.status(ex.getHttpStatus()).body(response);
     }
 }

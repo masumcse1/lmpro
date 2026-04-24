@@ -19,7 +19,7 @@
 
 {
   "timestamp": "2026-04-24T15:50:22Z",
-  "status": 402, // No need 
+  "status": 402, // No need
   "code": 6001,
   "error": "INSUFFICIENT_FUNDS",
   "message": "Transaction declined: Account balance is below the required amount.",
