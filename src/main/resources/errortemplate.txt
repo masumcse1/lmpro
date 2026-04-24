@@ -45,3 +45,14 @@
   "traceId": "tx-9988-abc"
 }
 
+###############################################################
+
+current problem :
+
+1.namign convention is not crrect:
+
+ super(Error_Type.INSUFFICIENT_FUNDS.name(),Error_Type.INSUFFICIENT_FUNDS.getMessage(),HttpStatus.PAYMENT_REQUIRED);
+
+ 2.HttpStatus in Header
+
+  confusion 
