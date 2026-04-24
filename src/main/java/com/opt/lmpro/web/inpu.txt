@@ -1,0 +1,7 @@
+http://localhost:8080/api/accounts/transfer
+
+{
+  "fromUserId": "U1",
+  "toUserId": "U2",
+  "amount": 200
+}
