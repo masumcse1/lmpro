@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class InsufficientFundsException extends BusinessException {
 
     public InsufficientFundsException(String accountId, BigDecimal requested, BigDecimal available) {
-        super(Error_Type.INSUFFICIENT_FUNDS.getMessage(),Error_Type.INSUFFICIENT_FUNDS.name(),HttpStatus.PAYMENT_REQUIRED);
+        super(Error_Type.INSUFFICIENT_FUNDS.name(),Error_Type.INSUFFICIENT_FUNDS.getMessage(),HttpStatus.PAYMENT_REQUIRED);
 
         addContext("accountId", accountId);
         addContext("requestedAmount", requested);

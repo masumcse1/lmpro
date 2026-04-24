@@ -21,7 +21,7 @@ public abstract class BusinessException extends RuntimeException {
      * @param errorCode Machine-readable error code (e.g., "USER_NOT_FOUND")
      * @param httpStatus HTTP status to return (e.g., HttpStatus.NOT_FOUND)
      */
-    protected BusinessException(String message, String errorCode, HttpStatus httpStatus) {
+    protected BusinessException(String errorCode, String message, HttpStatus httpStatus) {
         super(message);
         this.errorCode = errorCode;
         this.httpStatus = httpStatus;
