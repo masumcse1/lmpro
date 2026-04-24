@@ -1,0 +1,47 @@
+
+
+=====================Errror Response Template======================================
+{
+  "timestamp": "ISO-8601 datetime",
+  "status": 400,
+  "code": 6001,
+  "error_type": "SHORT_ERROR_CODE",
+  "message": "Detailed human-readable error message",
+  "method": "HTTP_METHOD",
+  "path": "API_ENDPOINT",
+  "traceId": "UNIQUE_TRACE_ID",
+  "details": {
+    "key": "value"
+  },
+  "remediationUrl": "DOCUMENTATION_LINK"
+}
+  =================Exampel : INSUFFICIENT_FUNDS:6001==========================================
+
+{
+  "timestamp": "2026-04-24T15:50:22Z",
+  "status": 402,
+  "code": 6001,
+  "error": "INSUFFICIENT_FUNDS",
+  "message": "Transaction declined: Account balance is below the required amount.",
+  "method": "POST",
+  "path": "/api/v1/payments/checkout",
+  "traceId": "tx-9988-abc",
+  "details": {
+    "currentBalance": 15.50,
+    "requiredAmount": 50.00,
+    "currency": "USD"
+  },
+  "remediationUrl": "https://api.example.com/docs/errors/funds"
+}
+
+#############Gap#############################################
+
+{
+
+
+  "code": 6001,
+  "method": "POST",
+  "path": "/api/v1/payments/checkout",
+  "traceId": "tx-9988-abc"
+}
+
