@@ -1,0 +1,13 @@
+
+1. ResultMessage use in AccountService
+2. Message : prpertie : Transaction declined: Account balance is below the required amount.
+3.   "status": 400,  // No need (header isntad of body)
+4. Validation Exception @valid  @validator
+4. Security Exeption
+=================================
+
+  -----------Logger----------------
+
+  --------------------security-------
+
+  ----------documentation-----------------
