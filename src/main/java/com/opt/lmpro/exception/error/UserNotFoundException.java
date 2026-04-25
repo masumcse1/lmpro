@@ -14,7 +14,7 @@ public class UserNotFoundException extends BusinessException {
      * @param userId The user ID that wasn't found
      */
     public UserNotFoundException(String userId) {
-        super("User not found with ID: " + userId, "USER_NOT_FOUND", HttpStatus.NOT_FOUND);
+        super("USER_NOT_FOUND", "User not found with ID: " + userId, HttpStatus.NOT_FOUND);
         addContext("userId", userId);                  // Include failed lookup ID
         addContext("resourceType", "user");           // Specify resource type
     }
