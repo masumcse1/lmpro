@@ -17,7 +17,7 @@ import java.util.Map;
 public class ErrorResponse {
 
     private Instant timestamp;            // ISO-8601 UTC (Z)
-    private Integer code;
+    private String code;
     private String error_type;
     private String message;
     private String method;                // HTTP method

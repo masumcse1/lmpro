@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
         String traceId = UUID.randomUUID().toString();
 
         ErrorResponse response = ErrorResponse.builder()
-                .code(Error_Type.valueOf(ex.getErrorCode()).getCode())
+                .code(ex.getErrorCode())
                 .error_type(ex.getErrorCode())
                 .message(ex.getMessage())
                 .timestamp(Instant.now())

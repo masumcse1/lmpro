@@ -2,6 +2,7 @@ package com.opt.lmpro.exception.global;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 /*
 Use 4 digit error code
@@ -22,14 +23,15 @@ https://developers.acmeticketing.com/support/solutions/articles/33000248662-api-
 @AllArgsConstructor
 public enum Error_Type {
 
-    UNKNOWN_ERROR(5000, "Unknown error !!!"),
+    UNKNOWN_ERROR("5000", "Unknown error !!!",HttpStatus.PAYMENT_REQUIRED),
 
-    INSUFFICIENT_FUNDS(6001,"Transaction declined: Account balance is below the required amount."),
+    INSUFFICIENT_FUNDS("6001","Transaction declined: Account balance is below the required amount.",HttpStatus.PAYMENT_REQUIRED),
 
-    MISSING_PACKAGE_DESCRIPTION(7002, "Required field vacation 'description' is missing");
+    MISSING_PACKAGE_DESCRIPTION("7002", "Required field vacation 'description' is missing",HttpStatus.PAYMENT_REQUIRED);
 
 
-    private final int code;
+    private final String errorCode;
     private final String message;
+    private final HttpStatus status;
 
 }
