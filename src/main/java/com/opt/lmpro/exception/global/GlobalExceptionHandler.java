@@ -85,11 +85,19 @@ public class GlobalExceptionHandler {
                 .details(ex.getContext())
                 .build();
 
-        if (ex.getHttpStatus().is5xxServerError()) {
-            log.error("Business exception [{}]: {}", traceId, ex.getMessage(), ex);
-        } else {
-            log.warn("Business exception [{}]: {} - {}", traceId, ex.getErrorCode(), ex.getMessage());
-        }
+        log.warn("BusinessException traceId={} service={} class={} method={} httpMethod={} path={} errorCode={} message={} context={}",
+                traceId,
+                "EmailSenderService",
+                "GlobalExceptionHandler",
+                "handleBusinessException",
+                request.getMethod(),
+                request.getRequestURI(),
+                ex.getErrorCode(),
+                ex.getMessage(),
+                ex.getContext(),
+                ex
+        );
+
 
         return ResponseEntity.status(ex.getHttpStatus()).body(response);
     }
