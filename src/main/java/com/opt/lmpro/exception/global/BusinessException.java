@@ -1,7 +1,6 @@
 package com.opt.lmpro.exception.global;
 
 import org.springframework.http.HttpStatus;
-
 import java.util.HashMap;
 import java.util.Map;
 

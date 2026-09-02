@@ -1,9 +1,7 @@
 package com.opt.lmpro.exception.error;
 
 import com.opt.lmpro.exception.global.BusinessException;
-import com.opt.lmpro.exception.global.Error_Type;
-import org.springframework.http.HttpStatus;
-
+import com.opt.lmpro.exception.global.ErrorType;
 import java.math.BigDecimal;
 
 /**
@@ -12,7 +10,7 @@ import java.math.BigDecimal;
  */
 public class InsufficientFundsException extends BusinessException {
 
-    public InsufficientFundsException(Error_Type error,String accountId,BigDecimal requested,BigDecimal available) {
+    public InsufficientFundsException(ErrorType error, String accountId, BigDecimal requested, BigDecimal available) {
 
         super(error.getErrorCode(), error.getMessage(), error.getStatus());
 

@@ -21,7 +21,7 @@ https://developers.acmeticketing.com/support/solutions/articles/33000248662-api-
 
 @Getter
 @AllArgsConstructor
-public enum Error_Type {
+public enum ErrorType {
 
     UNKNOWN_ERROR("5000", "Unknown error !!!",HttpStatus.PAYMENT_REQUIRED),
 

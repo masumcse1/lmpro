@@ -3,9 +3,8 @@ package com.opt.lmpro.service;
 import com.opt.lmpro.dto.TransferResult;
 import com.opt.lmpro.exception.error.InsufficientFundsException;
 import com.opt.lmpro.exception.error.UserNotFoundException;
-import com.opt.lmpro.exception.global.Error_Type;
+import com.opt.lmpro.exception.global.ErrorType;
 import com.opt.lmpro.repository.AccountHelper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,7 +29,7 @@ public class AccountService {
         BigDecimal toBalance = AccountHelper.ACCOUNTS.get(toAcc);
 
         if (fromBalance.compareTo(amount) < 0) {
-            throw new InsufficientFundsException(Error_Type.INSUFFICIENT_FUNDS,fromAcc,amount,fromBalance);
+            throw new InsufficientFundsException(ErrorType.INSUFFICIENT_FUNDS,fromAcc,amount,fromBalance);
         }
 
         // update balances

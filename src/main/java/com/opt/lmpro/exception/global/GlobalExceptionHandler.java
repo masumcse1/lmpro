@@ -1,6 +1,5 @@
 package com.opt.lmpro.exception.global;
 
-import com.opt.lmpro.exception.error.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,30 +18,6 @@ import java.util.UUID;
 public class GlobalExceptionHandler {
 
     /**
-     * Handles business logic exceptions with appropriate HTTP status
-     * @param ex Business exception containing error context
-     * @return Structured error response with NOT_FOUND status
-     */
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(
-            UserNotFoundException ex,
-            HttpServletRequest request) {
-
-        String traceId = UUID.randomUUID().toString();
-
-        ErrorResponse error = ErrorResponse.builder()
-                .error_type("USER_NOT_FOUND")
-                .message(ex.getMessage())
-                .timestamp(Instant.now())
-                .method(request.getMethod())
-                .path(request.getRequestURI())
-                .traceId(traceId)
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-    }
-
-    /**
      * Catch-all handler for unexpected errors
      * Generates tracking ID and prevents information leakage
      * @param ex Any unhandled exception
@@ -55,15 +30,28 @@ public class GlobalExceptionHandler {
 
         String traceId = UUID.randomUUID().toString();
 
-        log.error("Unexpected error [{}]", traceId, ex);
+        log.error("Unexpected error [{}] service={} class={} method={} httpMethod={} path={} errorCode={} message={} context={}",
+                traceId,
+                "EmailSenderService",
+                "GlobalExceptionHandler",
+                "handleGeneral",
+                request.getMethod(),
+                request.getRequestURI(),
+                "INTERNAL_ERROR",
+                "An unexpected error occurred",
+                null,
+                ex
+        );
 
         ErrorResponse error = ErrorResponse.builder()
-                .error_type("INTERNAL_ERROR")
+                .code("INTERNAL_ERROR")
+                .errorType("INTERNAL_ERROR")
                 .message("An unexpected error occurred")
                 .timestamp(Instant.now())
                 .method(request.getMethod())
                 .path(request.getRequestURI())
                 .traceId(traceId)
+                .details(null)
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
@@ -73,17 +61,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex, HttpServletRequest request) {
 
         String traceId = UUID.randomUUID().toString();
-
-        ErrorResponse response = ErrorResponse.builder()
-                .code(ex.getErrorCode())
-                .error_type(ex.getErrorCode())
-                .message(ex.getMessage())
-                .timestamp(Instant.now())
-                .method(request.getMethod())
-                .path(request.getRequestURI())
-                .traceId(traceId)
-                .details(ex.getContext())
-                .build();
 
         log.warn("BusinessException traceId={} service={} class={} method={} httpMethod={} path={} errorCode={} message={} context={}",
                 traceId,
@@ -98,6 +75,16 @@ public class GlobalExceptionHandler {
                 ex
         );
 
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ex.getErrorCode())
+                .errorType(ex.getErrorCode())
+                .message(ex.getMessage())
+                .timestamp(Instant.now())
+                .method(request.getMethod())
+                .path(request.getRequestURI())
+                .traceId(traceId)
+                .details(ex.getContext())
+                .build();
 
         return ResponseEntity.status(ex.getHttpStatus()).body(response);
     }

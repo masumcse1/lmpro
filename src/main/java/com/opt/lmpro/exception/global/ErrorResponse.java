@@ -3,7 +3,6 @@ package com.opt.lmpro.exception.global;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
-
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +17,7 @@ public class ErrorResponse {
 
     private Instant timestamp;            // ISO-8601 UTC (Z)
     private String code;
-    private String error_type;
+    private String errorType;
     private String message;
     private String method;                // HTTP method
     private String path;                  // API path
